@@ -1,7 +1,0 @@
-/home/joo/Projects/CloudFileServer/builds/CloudFileServer
-/home/joo/Projects/CloudFileServer/builds/appsettings.Development.json
-/home/joo/Projects/CloudFileServer/builds/appsettings.json
-/home/joo/Projects/CloudFileServer/builds/CloudFileServer.dll
-/home/joo/Projects/CloudFileServer/builds/CloudFileServer.deps.json
-/home/joo/Projects/CloudFileServer/builds/CloudFileServer.runtimeconfig.json
-/home/joo/Projects/CloudFileServer/builds/CloudFileServer.pdb
