@@ -1,0 +1,23 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "RootPath": "{path}",
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://localhost:5000"
+      },
+      "HttpsInlineCertAndKeyFile": {
+        "Url": "https://localhost:5002",
+        "Certificate": {
+          "Path": "cert/cert1.pem",
+          "KeyPath": "cert/privkey1.pem"
+        }
+      }
+    }
+  }
+}

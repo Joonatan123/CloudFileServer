@@ -13,6 +13,7 @@ namespace CloudFileServer.Models
         //[Display(Name = "Creation Date")]
         //[DataType(DataType.Date)]
         public SortInfo sortInfo { get; set; }
+        public string upperFolder { get; set; }
         public DownloadViewModel(string path, string rootDirectory)
         {
             sortInfo = new SortInfo();
@@ -25,14 +26,13 @@ namespace CloudFileServer.Models
                 files.Add(new MvcFile(fileNames[i], rootDirectory));
             }
             bool backFolder = !path.Equals("/");
-            int add = 0;
-            if (backFolder)
-                add = 1;
 
             string[] folderNames = Directory.GetDirectories(rootDirectory + path);
-            folders = new List<MvcFolder>(folderNames.Length + add);
-            if (backFolder)
-                folders.Add(new MvcFolder(path));
+            folders = new List<MvcFolder>(folderNames.Length);
+            if (backFolder){
+                MvcFolder mvcFolder = new MvcFolder(path);
+                upperFolder = mvcFolder.Path;
+            }
 
             for (int i = 0; i < folderNames.Length; i++)
             {

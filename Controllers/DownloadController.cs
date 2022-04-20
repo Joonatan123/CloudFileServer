@@ -30,12 +30,12 @@ namespace CloudFileServer.Controllers
 
         public IActionResult Index(string path, string? sort, bool? reverse)
         {
-            if(path.Contains(".."))
+            if (path == null)
+                path = "/";
+            if (path.Contains(".."))
                 path = "/";
             if (!Directory.Exists(rootPath + path))
                 return Content("Path doesn't exist");
-            if (path == null)
-                path = "/";
             path.Replace("%2F", "/");
             DownloadViewModel temp = new DownloadViewModel(path, rootPath);
             if (sort != null)
@@ -122,7 +122,7 @@ namespace CloudFileServer.Controllers
                 section = await reader.ReadNextSectionAsync();
             }
 
-            return Redirect("/Download?path="+path);
+            return Redirect("/Download?path=" + path);
         }
 
 

@@ -102,6 +102,27 @@
             </tr>
         </thead>
         <tbody>
+            @if(!Model.path.Equals("/"))
+            {
+                <tr>
+
+                    <td>
+
+                    </td>
+                    <td>
+                        <a href="?path=@Model.upperFolder" }>../</a>
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            }
             @foreach (var item in Model.folders)
             {
                 <tr>
