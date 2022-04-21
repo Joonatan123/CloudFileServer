@@ -4,3 +4,5 @@ appsettings.Development.json
 appsettings.json
 cert
 builds
+appsettings.Release.json
+appsettings.Production.json

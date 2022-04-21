@@ -16,6 +16,7 @@ namespace CloudFileServer.Models
         public string upperFolder { get; set; }
         public DownloadViewModel(string path, string rootDirectory)
         {
+            upperFolder = "";
             sortInfo = new SortInfo();
             this.path = path;
             string[] fileNames = Directory.GetFiles(rootDirectory + path);
