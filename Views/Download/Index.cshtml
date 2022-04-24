@@ -14,96 +14,96 @@
         <thead>
             <tr>
                 @{
-                    string colonName = "";
-                }
+                        string colonName = "";
+                    }
                 <th>
 
                 </th>
                 <th>
-                    @{
-                        colonName = Html.DisplayNameFor(model => model.files[0].Name);
-                    }
+                        @{
+                            colonName = Html.DisplayNameFor(model => model.files[0].Name);
+                        }
                     <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
                         style="color: black;text-decoration: none;">
-                        @if (Model.sortInfo.SortBy.Equals(colonName))
-                        {
-                            @if (Model.sortInfo.Reverse)
+                            @if (Model.sortInfo.SortBy.Equals(colonName))
                             {
+                                @if (Model.sortInfo.Reverse)
+                                {
                                 <i class="bi-arrow-up"></i>
-                            }
-                            else
-                            {
+                                }
+                                else
+                                {
                                 <i class="bi-arrow-down"></i>
+                                }
                             }
-                        }
-                        @colonName
+                            @colonName
                     </a>
                 </th>
                 <th>
-                    @{
-                        colonName = Html.DisplayNameFor(model => model.files[0].Extension);
-                    }
+                        @{
+                            colonName = Html.DisplayNameFor(model => model.files[0].Extension);
+                        }
                     <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
                         style="color: black;text-decoration: none;">
-                        @if (Model.sortInfo.SortBy.Equals(colonName))
-                        {
-                            @if (Model.sortInfo.Reverse)
+                            @if (Model.sortInfo.SortBy.Equals(colonName))
                             {
+                                @if (Model.sortInfo.Reverse)
+                                {
                                 <i class="bi-arrow-up"></i>
-                            }
-                            else
-                            {
+                                }
+                                else
+                                {
                                 <i class="bi-arrow-down"></i>
+                                }
                             }
-                        }
-                        @colonName
+                            @colonName
                     </a>
                 </th>
                 <th>
-                    @{
-                        colonName = Html.DisplayNameFor(model => model.files[0].Date);
-                    }
+                        @{
+                            colonName = Html.DisplayNameFor(model => model.files[0].Date);
+                        }
                     <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
                         style="color: black;text-decoration: none;">
-                        @if (Model.sortInfo.SortBy.Equals(colonName))
-                        {
-                            @if (Model.sortInfo.Reverse)
+                            @if (Model.sortInfo.SortBy.Equals(colonName))
                             {
+                                @if (Model.sortInfo.Reverse)
+                                {
                                 <i class="bi-arrow-up"></i>
-                            }
-                            else
-                            {
+                                }
+                                else
+                                {
                                 <i class="bi-arrow-down"></i>
+                                }
                             }
-                        }
-                        @colonName
+                            @colonName
                     </a>
                 </th>
                 <th>
-                    @{
-                        colonName = Html.DisplayNameFor(model => model.files[0].Size);
-                    }
+                        @{
+                            colonName = Html.DisplayNameFor(model => model.files[0].Size);
+                        }
                     <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
                         style="color: black;text-decoration: none;">
-                        @if (Model.sortInfo.SortBy.Equals(colonName))
-                        {
-                            @if (Model.sortInfo.Reverse)
+                            @if (Model.sortInfo.SortBy.Equals(colonName))
                             {
+                                @if (Model.sortInfo.Reverse)
+                                {
                                 <i class="bi-arrow-up"></i>
-                            }
-                            else
-                            {
+                                }
+                                else
+                                {
                                 <i class="bi-arrow-down"></i>
+                                }
                             }
-                        }
-                        @colonName
+                            @colonName
                     </a>
                 </th>
             </tr>
         </thead>
         <tbody>
-            @if(!Model.path.Equals("/"))
-            {
+                @if (!Model.path.Equals("/"))
+                {
                 <tr>
 
                     <td>
@@ -116,22 +116,22 @@
 
                     </td>
                     <td>
-                        
+
                     </td>
                     <td>
 
                     </td>
                 </tr>
-            }
-            @foreach (var item in Model.folders)
-            {
+                }
+                @foreach (var item in Model.folders)
+                {
                 <tr>
 
                     <td href="url">
-                        @if (!item.Name.Equals(".."))
-                        {
+                            @if (!item.Name.Equals(".."))
+                            {
                             <input type="checkbox" name="folders" value=@item.Name onclick="return ValidatePetSelection();">
-                        }
+                            }
                     </td>
                     <td>
                         <a href="?path=@item.ServerPath" }>@Html.DisplayFor(modelItem => item.Name)</a>
@@ -140,46 +140,56 @@
 
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Date)
+                            @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
 
                     </td>
                 </tr>
 
-            }
+                }
 
 
-            @foreach (var item in Model.files)
-            {
+                @foreach (var item in Model.files)
+                {
                 <tr>
                     <td>
                         <input type="checkbox" name="files" value=@item.Name onclick="return ValidatePetSelection();">
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Name)
+                            @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Extension)
+                            @Html.DisplayFor(modelItem => item.Extension)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Date)
+                            @Html.DisplayFor(modelItem => item.Date)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Size)
+                            @Html.DisplayFor(modelItem => item.Size)
                     </td>
                 </tr>
 
-            }
+                }
 
         </tbody>
     </table>
-    <input type="submit" value="Download selected files">
-</form>
-<form action="/Download/Upload" enctype="multipart/form-data" method="POST">
-    <input type="hidden" name="path" value=@Model.path>
-    <div class="form-group" AllowMultiple="true">
-        <input type="file" class="form-control-file" id="fileUpload" AllowMultiple="true" multiple name="FileUpload">
+    <div class="m-1">
+        <div class="row container">
+            <div class="col-6"><div class="m-1">
+                <input type="submit" value="Download selected files">
+            </form>
+            </div></div>
+            <div class="col-6">
+                <form action="/Download/Upload" enctype="multipart/form-data" method="POST">
+                <input type="hidden" name="path" value=@Model.path>
+                <div class="form-group" AllowMultiple="true">
+                    <input type="file" class="form-control-file m-1" id="fileUpload" AllowMultiple="true" multiple
+                    name="FileUpload">
+                </div>
+            <button type="submit" class="btn btn-primary m-1">Upload</button>
+            </form>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
+</div>

@@ -7,6 +7,7 @@ namespace CloudFileServer.Models
     {
         public string Path { get; set; }
         public string Name { get; set; }
+        [Display(Name = "Ext.")]
         public string Extension { get; set; }
         //[Display(Name = "Upload Date")]
         //[DataType(DataType.Date)]

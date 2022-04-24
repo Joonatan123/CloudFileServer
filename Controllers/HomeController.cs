@@ -13,10 +13,13 @@ public class HomeController : Controller
     {
         _logger = logger;
         password = config.GetValue<string>("Password", "pass");
+
     }
 
     public IActionResult Index()
     {
+        if (password.Equals("Disabled"))
+            HttpContext.Session.SetInt32("loggedIn", 73);
         if (HttpContext.Session.GetInt32("loggedIn") == null)
             return Redirect("/Home/LogIn");
         return Redirect("/Download");
@@ -29,6 +32,8 @@ public class HomeController : Controller
 
     public IActionResult LogIn()
     {
+        if (password.Equals("Disabled"))
+            HttpContext.Session.SetInt32("loggedIn", 73);
         if (HttpContext.Session.GetInt32("loggedIn") != null)
             return Redirect("/Download");
         return View();
