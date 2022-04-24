@@ -32,6 +32,8 @@ namespace CloudFileServer.Controllers
 
         public IActionResult Index(string path, string? sort, bool? reverse)
         {
+            if(HttpContext.Session.GetInt32("loggedIn") == null)
+                return Redirect("/Home/LogIn");
             if (path == null)
                 path = "/";
             if (path.Contains(".."))
@@ -50,6 +52,8 @@ namespace CloudFileServer.Controllers
         [HttpGet]
         public IActionResult Download(string root, string[] folders, string[] files)
         {
+            if(HttpContext.Session.GetInt32("loggedIn") == null)
+                return Redirect("/Home/LogIn");
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string tempDirectory = Path.Join(programDirectory + "Download/");
             string sourceDirectory = Path.Join(rootPath, root);
@@ -81,6 +85,8 @@ namespace CloudFileServer.Controllers
 
         public async Task<IActionResult> SaveFileToPhysicalFolder(string path)
         {
+            if(HttpContext.Session.GetInt32("loggedIn") == null)
+                return Redirect("/Home/LogIn");
             //return Content(path);
             var boundary = HeaderUtilities.RemoveQuotes(
              MediaTypeHeaderValue.Parse(Request.ContentType).Boundary

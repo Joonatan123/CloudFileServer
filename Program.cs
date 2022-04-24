@@ -12,6 +12,13 @@ if(!Directory.Exists(path))
 });*/
 //builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
     //.AddCertificate();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".CloudFileServer.Session";
+    options.IdleTimeout = TimeSpan.FromSeconds(300);
+    options.Cookie.IsEssential = true;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -43,7 +50,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.UseSession();
 //app.UseAuthorization();
 
 app.MapControllerRoute(
