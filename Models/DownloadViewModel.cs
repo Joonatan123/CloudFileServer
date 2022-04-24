@@ -70,7 +70,7 @@ namespace CloudFileServer.Models
                         files = files.OrderByDescending(m => m.Date).ToList();
                     }
                     break;
-                case "Extension":
+                case "Ext.":
                     if (!sortInfo.Reverse)
                         files = files.OrderBy(m => m.Extension).ToList();
                     else

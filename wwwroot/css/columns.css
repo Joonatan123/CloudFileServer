@@ -1,0 +1,12 @@
+table {
+    width:80%;
+    table-layout:fixed;
+}
+td {
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+tr {
+    font-size: min( max(calc(1vw + 4px), 10px), 15px );
+  }
