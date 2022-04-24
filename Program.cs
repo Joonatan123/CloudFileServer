@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.HttpOverrides;
 var builder = WebApplication.CreateBuilder(args);
 
-
+string path = builder.Configuration.GetValue<string>("RootPath", "undefined");
+if(!Directory.Exists(path))
+    throw new Exception("Configured path does not exist. Change path in appsettings.json");
 /*builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders =
@@ -35,11 +37,12 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-//app.UseHttpsRedirection();
+//app.UseHsts();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 //app.UseAuthorization();
 

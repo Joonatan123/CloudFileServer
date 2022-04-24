@@ -1,3 +1,4 @@
+#!/bin/bash
 sed "s+{path}+$(pwd)+;s+{user}+$USER+" CloudFileServer.service.template > CloudFileServer.service
 mv -f CloudFileServer.service /etc/systemd/system || $(rm CloudFileServer.service && echo "error" && exit 125)
 

@@ -26,6 +26,8 @@ namespace CloudFileServer.Controllers
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("de-DE");
             _webHostEnvironment = webHostEnvironment;
             rootPath = _config.GetValue<string>("RootPath", "undefined");
+            if(!Directory.Exists(rootPath))
+                throw new TypeInitializationException("Configured path doesn't exist. Change it in appsettings.json.", new Exception());
         }
 
         public IActionResult Index(string path, string? sort, bool? reverse)
