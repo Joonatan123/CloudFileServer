@@ -170,13 +170,13 @@ function toggle(source) {
         <div class="row container">
             <div class="col-6">
                 <div class="">
-                    <input type="submit" class="file-input m-1" value="Download selected files" form="download">
+                    <input type="submit" class="btn btn-primary m-1" value="Download selected files" form="download">
             
 
                     <form action="/Download" enctype="multipart/form-data" method="GET">
                         <input type="hidden" name="path" value=@Model.path>
                         <input type="hidden" name="mkdir" value="true">
-                        <input type="submit" class="file-input m-1" value="Create folder">
+                        <input type="submit" class="btn btn-primary m-1" value="Create folder">
                     </form>
                 </div>
             </div>
@@ -186,7 +186,7 @@ function toggle(source) {
                     <div class="form-group" AllowMultiple="true">
                         <input type="file" class="form-control-file m-1 file-input" id="fileUpload" AllowMultiple="true" multiple name="FileUpload" style="width: 110%;">
                     </div>
-                <button type="submit" class="btn btn-primary m-1 file-input">Upload</button>
+                <button type="submit" class="btn btn-danger m-1 file-input">Upload</button>
                 </form>
             </div>
         </div>
