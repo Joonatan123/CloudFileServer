@@ -29,96 +29,44 @@ function toggle(source) {
         <thead>
             <tr>
                 @{
-                        string colonName = "";
-                    }
+                    string colonName = "";
+                    string[] colonNames = new string[4]{
+                        Html.DisplayNameFor(model => model.files[0].Name),
+                        Html.DisplayNameFor(model => model.files[0].Extension),
+                        Html.DisplayNameFor(model => model.files[0].Date),
+                        Html.DisplayNameFor(model => model.files[0].Size)
+                    };
+                }
                 <th>
                     <div id="hideThisFromNonJs" style="display:none">
                         <input type="checkbox" onClick="toggle(this)" />
                     </div>
                     <script type="text/javascript">
-                    document.getElementById('hideThisFromNonJs').style.display='block';
+                        document.getElementById('hideThisFromNonJs').style.display='block';
                     </script>
                 </th>
+                @for(int i = 0; i < 4; i++){
                 <th>
-                        @{
-                            colonName = Html.DisplayNameFor(model => model.files[0].Name);
-                        }
+                        
+                    @{colonName=colonNames[i];}
+                        
                     <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
                         style="color: black;text-decoration: none;">
-                            @if (Model.sortInfo.SortBy.Equals(colonName))
+                        @if (Model.sortInfo.SortBy.Equals(colonName))
+                        {
+                            @if (Model.sortInfo.Reverse)
                             {
-                                @if (Model.sortInfo.Reverse)
-                                {
                                 <i class="bi-arrow-up"></i>
-                                }
-                                else
-                                {
-                                <i class="bi-arrow-down"></i>
-                                }
                             }
-                            @colonName
-                    </a>
-                </th>
-                <th>
-                        @{
-                            colonName = Html.DisplayNameFor(model => model.files[0].Extension);
+                            else
+                            {
+                                <i class="bi-arrow-down"></i>
+                            }
                         }
-                    <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
-                        style="color: black;text-decoration: none;">
-                            @if (Model.sortInfo.SortBy.Equals(colonName))
-                            {
-                                @if (Model.sortInfo.Reverse)
-                                {
-                                <i class="bi-arrow-up"></i>
-                                }
-                                else
-                                {
-                                <i class="bi-arrow-down"></i>
-                                }
-                            }
-                            @colonName
+                    @colonName
                     </a>
                 </th>
-                <th>
-                        @{
-                            colonName = Html.DisplayNameFor(model => model.files[0].Date);
-                        }
-                    <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
-                        style="color: black;text-decoration: none;">
-                            @if (Model.sortInfo.SortBy.Equals(colonName))
-                            {
-                                @if (Model.sortInfo.Reverse)
-                                {
-                                <i class="bi-arrow-up"></i>
-                                }
-                                else
-                                {
-                                <i class="bi-arrow-down"></i>
-                                }
-                            }
-                            @colonName
-                    </a>
-                </th>
-                <th>
-                        @{
-                            colonName = Html.DisplayNameFor(model => model.files[0].Size);
-                        }
-                    <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
-                        style="color: black;text-decoration: none;">
-                            @if (Model.sortInfo.SortBy.Equals(colonName))
-                            {
-                                @if (Model.sortInfo.Reverse)
-                                {
-                                <i class="bi-arrow-up"></i>
-                                }
-                                else
-                                {
-                                <i class="bi-arrow-down"></i>
-                                }
-                            }
-                            @colonName
-                    </a>
-                </th>
+                }
             </tr>
         </thead>
         <tbody>
