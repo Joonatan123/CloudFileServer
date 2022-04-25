@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using CloudFileServer.Functions;
 namespace CloudFileServer.Models
 {
     public class MvcFile
@@ -12,6 +12,7 @@ namespace CloudFileServer.Models
         //[Display(Name = "Upload Date")]
         //[DataType(DataType.Date)]
         public DateTime Date { get; set; }
+        public string DateString { get; set; }
         public int Size { get; set; }
         public string SizeString { get; set; }
         public string FullName;
@@ -41,6 +42,7 @@ namespace CloudFileServer.Models
             FullName = Path + Name;
             SizeString = "";
             MakeSizeString();
+            DateString = HelperFunctions.MakeDateString(Date);
         }
         public void MakeSizeString()
         {

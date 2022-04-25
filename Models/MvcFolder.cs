@@ -10,6 +10,7 @@ namespace CloudFileServer.Models
         //[Display(Name = "Creation Date")]
         //[DataType(DataType.Date)]
         public DateTime Date { get; set; }
+        public string DateString { get; set; }
         public string ServerPath { get; set; }
         public MvcFolder(string path, string rootDirectory)
         {
@@ -22,6 +23,7 @@ namespace CloudFileServer.Models
             Name = Path.Substring(lastSlash + 1) + '/';
             Path = Path.Substring(0, lastSlash + 1);
             ServerPath = Path + Name;
+            DateString = CloudFileServer.Functions.HelperFunctions.MakeDateString(Date);
         }
         public MvcFolder(string path)
         {
@@ -34,6 +36,7 @@ namespace CloudFileServer.Models
             Name = "..";
             Date = new DateTime();
             ServerPath = Path;
+            DateString = CloudFileServer.Functions.HelperFunctions.MakeDateString(Date);
         }
     }
 }

@@ -31,12 +31,14 @@ arm :
 	mkdir builds/$(architecture)/cert
 	cp cert/cert1.pem cert/privkey1.pem builds/$(architecture)/cert
 
+
+
 zip :
-	echo "builds/$(architecture).zip"
-	if [ -f "builds/$(architecture).zip" ]; then\
-		rm "builds/$(architecture).zip";\
-	fi
-	zip -9 -r builds/$(architecture).zip builds/$(architecture)
+	cd builds;\
+	if [ -f "$(architecture).zip" ]; then\
+		rm "$(architecture).zip";\
+	fi;\
+	zip -9 -r $(architecture).zip -r $(architecture);\
 
 test:
 	echo $(remove)
