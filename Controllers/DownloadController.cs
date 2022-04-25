@@ -133,7 +133,7 @@ namespace CloudFileServer.Controllers
 
             return Redirect("/Download?path=" + path);
         }
-        public async Task<IActionResult> Mkdir(string path, string folderName)
+        public IActionResult Mkdir(string path, string folderName)
         {
             if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");

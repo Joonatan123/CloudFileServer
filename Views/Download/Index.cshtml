@@ -8,6 +8,16 @@
     @Model.path
 </h1>
 
+<script language="JavaScript">
+function toggle(source) {
+    var aa= document.getElementsByTagName("input");
+    for (var i =0; i < aa.length; i++){
+        if (aa[i].type == 'checkbox')
+            aa[i].checked = source.checked;
+    }
+}
+</script>
+
 <form id="download" method="get" action="/Download/Download"></form>
     <input type="hidden" name="root" value=@Model.path>
     <table class="table" style="table-layout:fixed;"><!--" overflow: hidden;"-->
@@ -22,7 +32,12 @@
                         string colonName = "";
                     }
                 <th>
-
+                    <div id="hideThisFromNonJs" style="display:none">
+                        <input type="checkbox" onClick="toggle(this)" />
+                    </div>
+                    <script type="text/javascript">
+                    document.getElementById('hideThisFromNonJs').style.display='block';
+                    </script>
                 </th>
                 <th>
                         @{
@@ -203,28 +218,28 @@
 
         </tbody>
     </table>
-    <div class="m-1">
+    <div class="">
         <div class="row container">
-            <div class="col-6"><div class="m-1">
-                <input type="submit" class="file-input" value="Download selected files" form="download">
+            <div class="col-6">
+                <div class="">
+                    <input type="submit" class="file-input m-1" value="Download selected files" form="download">
             
 
-            <form action="/Download" enctype="multipart/form-data" method="GET">
-                <input type="hidden" name="path" value=@Model.path>
-                <input type="hidden" name="mkdir" value="true">
-                <input type="submit" class="file-input" value="Create folder">
-            </form>
-
-            </div></div>
+                    <form action="/Download" enctype="multipart/form-data" method="GET">
+                        <input type="hidden" name="path" value=@Model.path>
+                        <input type="hidden" name="mkdir" value="true">
+                        <input type="submit" class="file-input m-1" value="Create folder">
+                    </form>
+                </div>
+            </div>
             <div class="col-6">
                 <form action="/Download/Upload" enctype="multipart/form-data" method="POST">
-                <input type="hidden" name="path" value=@Model.path>
-                <div class="form-group" AllowMultiple="true">
-                    <input type="file" class="form-control-file m-1 file-input" id="fileUpload" AllowMultiple="true" multiple
-                    name="FileUpload" style="width: 110%;">
-                </div>
-            <button type="submit" class="btn btn-primary m-1 file-input">Upload</button>
-            </form>
+                    <input type="hidden" name="path" value=@Model.path>
+                    <div class="form-group" AllowMultiple="true">
+                        <input type="file" class="form-control-file m-1 file-input" id="fileUpload" AllowMultiple="true" multiple name="FileUpload" style="width: 110%;">
+                    </div>
+                <button type="submit" class="btn btn-primary m-1 file-input">Upload</button>
+                </form>
             </div>
         </div>
     </div>
