@@ -26,33 +26,34 @@ namespace CloudFileServer.Controllers
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("de-DE");
             _webHostEnvironment = webHostEnvironment;
             rootPath = _config.GetValue<string>("RootPath", "undefined");
-            if(!Directory.Exists(rootPath))
+            if (!Directory.Exists(rootPath))
                 throw new TypeInitializationException("Configured path doesn't exist. Change it in appsettings.json.", new Exception());
         }
 
-        public IActionResult Index(string path, string? sort, bool? reverse)
+        public IActionResult Index(string path, string? sort, bool? reverse, bool? mkdir)
         {
-            if(HttpContext.Session.GetInt32("loggedIn") == null)
+            if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");
             if (path == null)
                 path = "/";
             if (path.Contains(".."))
                 path = "/";
+            path.Replace("%2F", "/");
             if (!Directory.Exists(rootPath + path))
                 return Content("Path doesn't exist");
-            path.Replace("%2F", "/");
             DownloadViewModel temp = new DownloadViewModel(path, rootPath);
             if (sort != null)
                 temp.sortInfo.SortBy = sort;
             if (reverse == true)
                 temp.sortInfo.Reverse = true;
             temp.Sort();
+            temp.mkdir = (mkdir != null && mkdir == true);
             return View(temp);
         }
         [HttpGet]
         public IActionResult Download(string root, string[] folders, string[] files)
         {
-            if(HttpContext.Session.GetInt32("loggedIn") == null)
+            if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");
             string programDirectory = AppDomain.CurrentDomain.BaseDirectory;
             string tempDirectory = Path.Join(programDirectory + "Download/");
@@ -85,7 +86,7 @@ namespace CloudFileServer.Controllers
 
         public async Task<IActionResult> SaveFileToPhysicalFolder(string path)
         {
-            if(HttpContext.Session.GetInt32("loggedIn") == null)
+            if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");
             //return Content(path);
             var boundary = HeaderUtilities.RemoveQuotes(
@@ -132,7 +133,16 @@ namespace CloudFileServer.Controllers
 
             return Redirect("/Download?path=" + path);
         }
-
+        public async Task<IActionResult> Mkdir(string path, string folderName)
+        {
+            if (HttpContext.Session.GetInt32("loggedIn") == null)
+                return Redirect("/Home/LogIn");
+            path.Replace("%2F", "/");
+            if(!Directory.Exists(Path.Join(rootPath,path)))
+                return Content("Directory does not exist");
+            Directory.CreateDirectory(Path.Join(rootPath,path,folderName));
+            return Redirect("/Download?path="+path);
+        }
 
     }
 }

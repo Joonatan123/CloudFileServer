@@ -40,5 +40,7 @@ zip :
 	fi;\
 	zip -9 -r $(architecture).zip -r $(architecture);\
 
-test:
-	echo $(remove)
+clean :
+	rm -rf builds/*
+	rm -rf obj/*
+	rm -rf bin/*
