@@ -15,7 +15,8 @@ namespace CloudFileServer.Models
         public string DateString { get; set; }
         public int Size { get; set; }
         public string SizeString { get; set; }
-        public string FullName;
+        public string FullName { get; set; }
+        public bool UseThumbnail { get; set; }
         public MvcFile(string path, string rootDirectory)
         {
             string file = path;
@@ -43,6 +44,9 @@ namespace CloudFileServer.Models
             SizeString = "";
             MakeSizeString();
             DateString = HelperFunctions.MakeDateString(Date);
+            string[] extensions = new string[5]{".jpg",".png",".webp","bmp","tiff"};
+            if(extensions.Contains(Extension))
+                UseThumbnail = true;
         }
         public void MakeSizeString()
         {

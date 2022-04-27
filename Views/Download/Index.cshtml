@@ -4,54 +4,84 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>
-    @Model.path
-</h1>
+<div class="row container">
+    <div class="col-8">
+        <h1 style="">
+            @Model.path
+        </h1>
+    </div>
+
+    <div class="col-4" style="font-size:10px; text-align: center;">
+        Image thumbnails
+        <form action="/Download" style="">
+            <input type="hidden" name="path" value=@Model.path>
+            <input type="hidden" name="sort" value=@Model.sortInfo.SortBy>
+            <input type="hidden" name="reverse" value=@Model.sortInfo.Reverse.ToString()>
+            <button type="submit" class="btn btn-dark" name="thumbnail"
+                value=@{WriteLiteral((!Model.thumbnail).ToString());}>
+                @if (Model.thumbnail)
+                {
+                    @Html.Raw("Enabled")
+                    ;
+                }
+                else
+                {
+                    @Html.Raw("Disabled")
+                    ;
+                }
+            </button>
+        </form>
+    </div>
+</div>
 
 <script language="JavaScript">
-function toggle(source) {
-    var aa= document.getElementsByTagName("input");
-    for (var i =0; i < aa.length; i++){
-        if (aa[i].type == 'checkbox')
-            aa[i].checked = source.checked;
+    function toggle(source) {
+        var aa = document.getElementsByTagName("input");
+        for (var i = 0; i < aa.length; i++) {
+            if (aa[i].type == 'checkbox')
+                aa[i].checked = source.checked;
+        }
     }
-}
 </script>
 
 <form id="download" method="get" action="/Download/Download"></form>
-    <input type="hidden" name="root" value=@Model.path>
-    <table class="table" style="table-layout:fixed;"><!--" overflow: hidden;"-->
-        <col style="width: 15px;" />
-        <col style="width: 40%;" />
-        <col style="width: 30px" />
-        <col style="width: 30px" />
-        <col style="width: 30px" />
-        <thead>
-            <tr>
-                @{
-                    string colonName = "";
-                    string[] colonNames = new string[4]{
-                        Html.DisplayNameFor(model => model.files[0].Name),
-                        Html.DisplayNameFor(model => model.files[0].Extension),
-                        Html.DisplayNameFor(model => model.files[0].Date),
-                        Html.DisplayNameFor(model => model.files[0].Size)
-                    };
-                }
+<input type="hidden" name="root" value=@Model.path>
+<table class="table" style="table-layout:fixed;">
+    <!--" overflow: hidden;"-->
+    <col style="width: 15px;" />
+    <col style="width: 40%;" />
+    <col style="width: 30px" />
+    <col style="width: 30px" />
+    <col style="width: 30px" />
+    <thead>
+        <tr>
+            @{
+                string colonName = "";
+                string[] colonNames = new string[4]{
+                Html.DisplayNameFor(model => model.files[0].Name),
+                Html.DisplayNameFor(model => model.files[0].Extension),
+                Html.DisplayNameFor(model => model.files[0].Date),
+                Html.DisplayNameFor(model => model.files[0].Size)
+                };
+            }
+            <th>
+                <div id="hideThisFromNonJs" style="display:none">
+                    <input type="checkbox" onClick="toggle(this)" />
+                </div>
+                <script type="text/javascript">
+                    document.getElementById('hideThisFromNonJs').style.display = 'block';
+                </script>
+            </th>
+            @for (int i = 0; i < 4; i++)
+            {
                 <th>
-                    <div id="hideThisFromNonJs" style="display:none">
-                        <input type="checkbox" onClick="toggle(this)" />
-                    </div>
-                    <script type="text/javascript">
-                        document.getElementById('hideThisFromNonJs').style.display='block';
-                    </script>
-                </th>
-                @for(int i = 0; i < 4; i++){
-                <th>
-                        
-                    @{colonName=colonNames[i];}
-                        
-                    <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)"
-                        style="color: black;text-decoration: none;">
+
+                    @{
+                        colonName = colonNames[i];
+                    }
+
+                    <a href="?path=@Model.path&sort=@colonName&reverse=@Model.sortInfo.GetNotReverse(colonName)&thumbnail=@Model.thumbnail"
+                    style="color: black;text-decoration: none;">
                         @if (Model.sortInfo.SortBy.Equals(colonName))
                         {
                             @if (Model.sortInfo.Reverse)
@@ -63,132 +93,152 @@ function toggle(source) {
                                 <i class="bi-arrow-down"></i>
                             }
                         }
-                    @colonName
+                        @colonName
                     </a>
                 </th>
-                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.path.Equals("/"))
+        {
+            <tr>
+
+                <td>
+
+                </td>
+                <td>
+                    <a
+                    href="?path=@Model.upperFolder&sort=@Model.sortInfo.SortBy&reverse=@Model.sortInfo.Reverse.ToString()&thumbnail=@Model.thumbnail.ToString()">../</a>
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
             </tr>
-        </thead>
-        <tbody>
-                @if (!Model.path.Equals("/"))
-                {
-                <tr>
+        }
+        @if (Model.mkdir)
+        {
+            <form id="mkdir" action="/Download/mkdir" method="get"></form>
+            <input type="hidden" name="path" value=@Model.path form="mkdir">
+            <input type="hidden" name="sort" value=@Model.sortInfo.SortBy form="mkdir">
+            <input type="hidden" name="reverse" value=@Model.sortInfo.Reverse.ToString() form="mkdir">
+            <input type="hidden" name="thumbnail" value=@Model.thumbnail.ToString() form="mkdir">
+            <tr>
 
-                    <td>
+                <td>
 
-                    </td>
-                    <td>
-                        <a href="?path=@Model.upperFolder">../</a>
-                    </td>
-                    <td>
+                </td>
+                <td>
+                    <input type="text" id="folderName" name="folderName" form="mkdir">
+                    <input type="submit" name="" value="Create" form="mkdir" />
+                </td>
+                <td>
 
-                    </td>
-                    <td>
+                </td>
+                <td>
 
-                    </td>
-                    <td>
+                </td>
+                <td>
 
-                    </td>
-                </tr>
-                }
-                @if (Model.mkdir)
-                {
-                    <form id="mkdir" action="/Download/mkdir" method="get"></form>
-                <tr>
+                </td>
+            </tr>
+        }
+        @foreach (var item in Model.folders)
+        {
+            <tr>
 
-                    <td>
+                <td href="url">
+                    @if (!item.Name.Equals(".."))
+                    {
+                        <input type="checkbox" name="folders" value=@item.Name onclick="return ValidatePetSelection();"
+                    form="download">
+                    }
+                </td>
+                <td>
+                    <a href="?path=@item.ServerPath&sort=@Model.sortInfo.SortBy&reverse=@Model.sortInfo.Reverse.ToString()&thumbnail=@Model.thumbnail.ToString()"
+                    }>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </a>
+                </td>
+                <td>
 
-                    </td>
-                    <td>
-                        <input type="text" id="folderName" name="folderName" form="mkdir">
-                        <input type="submit" name="" value="Create" form="mkdir" />
-                        <input type="hidden" name="path" value=@Model.path form="mkdir">
-                    </td>
-                    <td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateString)
+                </td>
+                <td>
 
-                    </td>
-                    <td>
+                </td>
+            </tr>
 
-                    </td>
-                    <td>
-
-                    </td>
-                </tr>
-                }
-                @foreach (var item in Model.folders)
-                {
-                <tr>
-
-                    <td href="url">
-                            @if (!item.Name.Equals(".."))
-                            {
-                            <input type="checkbox" name="folders" value=@item.Name onclick="return ValidatePetSelection();" form="download">
-                            }
-                    </td>
-                    <td>
-                        <a href="?path=@item.ServerPath" }>@Html.DisplayFor(modelItem => item.Name)</a>
-                    </td>
-                    <td>
-
-                    </td>
-                    <td>
-                            @Html.DisplayFor(modelItem => item.DateString)
-                    </td>
-                    <td>
-
-                    </td>
-                </tr>
-
-                }
+        }
 
 
-                @foreach (var item in Model.files)
-                {
-                <tr>
-                    <td>
-                        <input type="checkbox" name="files" value=@item.Name onclick="return ValidatePetSelection();" form="download">
-                    </td>
-                    <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                            @Html.DisplayFor(modelItem => item.Extension)
-                    </td>
-                    <td>
-                            @Html.DisplayFor(modelItem => item.DateString)
-                    </td>
-                    <td>
-                            @Html.DisplayFor(modelItem => item.SizeString)
-                    </td>
-                </tr>
+        @foreach (var item in Model.files)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" name="files" value=@item.Name onclick="return ValidatePetSelection();"
+                    form="download">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                    @if (Model.thumbnail && item.UseThumbnail)
+                    {
+                        <br>
+                        <img src="/Download/Image?path=@item.Path&name=@item.Name">
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Extension)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateString)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SizeString)
+                </td>
+            </tr>
 
-                }
+        }
 
-        </tbody>
-    </table>
-    <div class="">
-        <div class="row container">
-            <div class="col-6">
-                <div class="">
-                    <input type="submit" class="btn btn-primary m-1" value="Download selected files" form="download">
-            
+    </tbody>
+</table>
+<div class="">
+    <div class="row container">
+        <div class="col-6">
+            <div class="">
+                <input type="submit" class="btn btn-primary m-1" value="Download selected files" form="download">
 
-                    <form action="/Download" enctype="multipart/form-data" method="GET">
-                        <input type="hidden" name="path" value=@Model.path>
-                        <input type="hidden" name="mkdir" value="true">
-                        <input type="submit" class="btn btn-primary m-1" value="Create folder">
-                    </form>
-                </div>
-            </div>
-            <div class="col-6">
-                <form action="/Download/Upload" enctype="multipart/form-data" method="POST">
+
+                <form action="/Download" enctype="multipart/form-data" method="GET">
                     <input type="hidden" name="path" value=@Model.path>
-                    <div class="form-group" AllowMultiple="true">
-                        <input type="file" class="form-control-file m-1 file-input" id="fileUpload" AllowMultiple="true" multiple name="FileUpload" style="width: 110%;">
-                    </div>
-                <button type="submit" class="btn btn-danger m-1 file-input">Upload</button>
+                    <input type="hidden" name="mkdir" value="true">
+                    <input type="hidden" name="thumbnail" value=@Model.thumbnail.ToString()>
+                    <input type="hidden" name="sort" value=@Model.sortInfo.SortBy>
+                    <input type="hidden" name="reverse" value=@Model.sortInfo.Reverse.ToString()>
+                    <input type="submit" class="btn btn-primary m-1" value="Create folder">
                 </form>
             </div>
+        </div>
+        <div class="col-6">
+            <form action="/Download/Upload" enctype="multipart/form-data" method="POST">
+                <input type="hidden" name="path" value=@Model.path>
+                <input type="hidden" name="sort" value=@Model.sortInfo.SortBy>
+                <input type="hidden" name="reverse" value=@Model.sortInfo.Reverse.ToString()>
+                <input type="hidden" name="thumbnail" value=@Model.thumbnail.ToString()>
+                <div class="form-group" AllowMultiple="true">
+                    <input type="file" class="form-control-file m-1 file-input" id="fileUpload" AllowMultiple="true"
+                        multiple name="FileUpload" style="width: 110%;">
+                </div>
+                <button type="submit" class="btn btn-danger m-1 file-input">Upload</button>
+            </form>
         </div>
     </div>
 </div>

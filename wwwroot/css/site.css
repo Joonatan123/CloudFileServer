@@ -20,3 +20,7 @@ body {
 .file-input{
   font-size: min( max(calc(2vw + 0px), 12px), 15px );
 }
+
+.ptest{
+  font-size: 60;
+}

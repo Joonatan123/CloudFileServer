@@ -7,6 +7,9 @@ using System.IO.Compression;
 using CloudFileServer.Functions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using Microsoft.AspNetCore.Http.Extensions; 
 
 namespace CloudFileServer.Controllers
 {
@@ -30,7 +33,7 @@ namespace CloudFileServer.Controllers
                 throw new TypeInitializationException("Configured path doesn't exist. Change it in appsettings.json.", new Exception());
         }
 
-        public IActionResult Index(string path, string? sort, bool? reverse, bool? mkdir)
+        public IActionResult Index(string path, string? sort, bool? reverse, bool? mkdir, bool? thumbnail)
         {
             if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");
@@ -48,6 +51,7 @@ namespace CloudFileServer.Controllers
                 temp.sortInfo.Reverse = true;
             temp.Sort();
             temp.mkdir = (mkdir != null && mkdir == true);
+            temp.thumbnail = (thumbnail != null && thumbnail == true);
             return View(temp);
         }
         [HttpGet]
@@ -84,7 +88,7 @@ namespace CloudFileServer.Controllers
         [Route("/Download/Upload")]
         [HttpPost]
 
-        public async Task<IActionResult> SaveFileToPhysicalFolder(string path)
+        public async Task<IActionResult> SaveFileToPhysicalFolder(string path, string? sort, bool? reverse, bool? thumbnail)
         {
             if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");
@@ -130,18 +134,39 @@ namespace CloudFileServer.Controllers
                 }
                 section = await reader.ReadNextSectionAsync();
             }
-
-            return Redirect("/Download?path=" + path);
+            //string? sort, bool? reverse, bool? thumbnail
+            return Redirect("/Download?path="+path+"&sort="+sort+"&reverse="+reverse.ToString()+"&thumbnail="+thumbnail);
         }
         public IActionResult Mkdir(string path, string folderName)
         {
             if (HttpContext.Session.GetInt32("loggedIn") == null)
                 return Redirect("/Home/LogIn");
             path.Replace("%2F", "/");
-            if(!Directory.Exists(Path.Join(rootPath,path)))
+            if (!Directory.Exists(Path.Join(rootPath, path)))
                 return Content("Directory does not exist");
-            Directory.CreateDirectory(Path.Join(rootPath,path,folderName));
-            return Redirect("/Download?path="+path);
+            Directory.CreateDirectory(Path.Join(rootPath, path, folderName));
+            return Redirect("/Download?path=" + path);
+        }
+        public IActionResult Image(string path, string name)
+        {
+            int thumbnailHeight = 80;
+            //Byte[] b = System.IO.File.ReadAllBytes(@"/home/joo/Projects/CloudFileServer/test/2d_car.jpg");   // You can use your own method over here.         
+            //return File(b, "image/jpeg");
+            using (Image image = SixLabors.ImageSharp.Image.Load(Path.Join(rootPath, path, name)))
+            {
+                // Resize the image in place and return it for chaining.
+                // 'x' signifies the current image processing context.
+                using (var ms = new MemoryStream())
+                {
+                    float aspect = (float)image.Width / image.Height;
+                    image.Mutate(x => x.Resize((int)(aspect * thumbnailHeight), thumbnailHeight));
+                    if (image.Width > 160)
+                        image.Mutate(x => x.Resize(200, (int)(200 / aspect)));
+
+                    image.SaveAsJpeg(ms);
+                    return File(ms.ToArray(), "image/jpeg");
+                }
+            }
         }
 
     }
