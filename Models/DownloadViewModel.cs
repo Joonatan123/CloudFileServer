@@ -15,6 +15,7 @@ namespace CloudFileServer.Models
         public SortInfo sortInfo { get; set; }
         public string upperFolder { get; set; }
         public bool mkdir { get; set; }
+        public bool thumbnail { get; set; }
         public DownloadViewModel(string path, string rootDirectory)
         {
             upperFolder = "";
@@ -41,6 +42,7 @@ namespace CloudFileServer.Models
                 folders.Add(new MvcFolder(folderNames[i], rootDirectory));
             }
             mkdir = false;
+            thumbnail = false;
         }
         public void Sort()
         {
