@@ -8,3 +8,6 @@ appsettings.Release.json
 appsettings.Production.json
 
 UploadToRaspi.sh
+test/
+test2
+thumbnails

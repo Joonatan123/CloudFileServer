@@ -4,6 +4,10 @@ if [ ! "${path: -1}" = "/" ]; then
     path="${path}/"
 fi
 
+if [ "${path}" = "/" ]; then
+    echo "Invalid path"
+    exit 1
+fi
 
 if [ ! -d "$path" ]; then
     echo "path doesn't exist"

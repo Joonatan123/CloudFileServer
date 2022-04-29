@@ -6,9 +6,9 @@
 
 <div class="row container">
     <div class="col-8">
-        <h1 style="">
+        <h3 style="">
             @Model.path
-        </h1>
+        </h3>
     </div>
 
     <div class="col-4" style="font-size:10px; text-align: center;">
@@ -135,7 +135,7 @@
 
                 </td>
                 <td>
-                    <input type="text" id="folderName" name="folderName" form="mkdir">
+                    <input type="text" id="folderName" name="folderName" form="mkdir" style="width: 60%;">
                     <input type="submit" name="" value="Create" form="mkdir" />
                 </td>
                 <td>
@@ -210,11 +210,12 @@
 
     </tbody>
 </table>
-<div class="">
+<div class="small-text">
     <div class="row container">
         <div class="col-6">
             <div class="">
-                <input type="submit" class="btn btn-primary m-1" value="Download selected files" form="download">
+                <input type="hidden" name="path" value=@Model.path form="download">
+                <input type="submit" class="btn btn-primary m-1 small-text" value="Download selected files" form="download">
 
 
                 <form action="/Download" enctype="multipart/form-data" method="GET">
@@ -223,7 +224,7 @@
                     <input type="hidden" name="thumbnail" value=@Model.thumbnail.ToString()>
                     <input type="hidden" name="sort" value=@Model.sortInfo.SortBy>
                     <input type="hidden" name="reverse" value=@Model.sortInfo.Reverse.ToString()>
-                    <input type="submit" class="btn btn-primary m-1" value="Create folder">
+                    <input type="submit" class="btn btn-primary m-1 small-text" value="Create folder">
                 </form>
             </div>
         </div>
@@ -233,12 +234,23 @@
                 <input type="hidden" name="sort" value=@Model.sortInfo.SortBy>
                 <input type="hidden" name="reverse" value=@Model.sortInfo.Reverse.ToString()>
                 <input type="hidden" name="thumbnail" value=@Model.thumbnail.ToString()>
-                <div class="form-group" AllowMultiple="true">
-                    <input type="file" class="form-control-file m-1 file-input" id="fileUpload" AllowMultiple="true"
-                        multiple name="FileUpload" style="width: 110%;">
+                <div class="fileUpload btn btn-outline-dark m-1 small-text">
+                    <span>Select files</span>
+                    <input id="uploadBtn" type="file" class="upload" multiple name="FileUpload" />
                 </div>
-                <button type="submit" class="btn btn-danger m-1 file-input">Upload</button>
+                <input id="uploadFile" placeholder="No files selected" disabled="disabled" class="upload-files-field2 upload-files-field small-text"/>
+                <br>
+                <button type="submit" class="btn btn-danger m-1 small-text">Upload</button>
             </form>
         </div>
     </div>
 </div>
+
+<script language="JavaScript">
+    document.getElementById("uploadBtn").onchange = function () {
+        if (this.files.length === 1)
+            document.getElementById("uploadFile").value = this.files[0].name;
+        else
+            document.getElementById("uploadFile").value = this.files.length + " files selected";
+    };
+</script>

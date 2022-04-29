@@ -8,14 +8,19 @@ using CloudFileServer.Functions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using SixLabors.ImageSharp;
+using SixLabors.Fonts;
 using SixLabors.ImageSharp.Processing;
-using Microsoft.AspNetCore.Http.Extensions; 
-
+using Microsoft.AspNetCore.Http.Extensions;
+using SixLabors.ImageSharp.Drawing.Processing;
+using System.IO;
+using System.Security.Cryptography;
 namespace CloudFileServer.Controllers
 {
     //[Route("File/{action=Index}/{id?}")]
     public class DownloadController : Controller
     {
+        static Object _lock = new Object();
+        static int id = 0;
         string rootPath = "undefined";
         private readonly ILogger<HomeController> _logger;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -135,7 +140,7 @@ namespace CloudFileServer.Controllers
                 section = await reader.ReadNextSectionAsync();
             }
             //string? sort, bool? reverse, bool? thumbnail
-            return Redirect("/Download?path="+path+"&sort="+sort+"&reverse="+reverse.ToString()+"&thumbnail="+thumbnail);
+            return Redirect("/Download?path=" + path + "&sort=" + sort + "&reverse=" + reverse.ToString() + "&thumbnail=" + thumbnail);
         }
         public IActionResult Mkdir(string path, string folderName)
         {
@@ -149,10 +154,21 @@ namespace CloudFileServer.Controllers
         }
         public IActionResult Image(string path, string name)
         {
-            int thumbnailHeight = 80;
+            string hash = HelperFunctions.GetStringHashString(Path.Join(rootPath, path, name));
+            //Console.WriteLine(Path.Join(rootPath, path, name));
+            if(!HelperFunctions.Exists("thumbnails/"+hash+".jpg")){
+                HelperFunctions.MakeThumbnail(Path.Join(rootPath, path, name));
+            }
+            Byte[] b = System.IO.File.ReadAllBytes("thumbnails/"+hash+".jpg");   // You can use your own method over here.         
+            return File(b, "image/jpeg");
+            //lock (_lock)
+            //{
+            int n = id;
             //Byte[] b = System.IO.File.ReadAllBytes(@"/home/joo/Projects/CloudFileServer/test/2d_car.jpg");   // You can use your own method over here.         
             //return File(b, "image/jpeg");
-            using (Image image = SixLabors.ImageSharp.Image.Load(Path.Join(rootPath, path, name)))
+
+            int thumbnailHeight = 50;
+            /*using (var image = SixLabors.ImageSharp.Image.Load(Path.Join(rootPath, path, name)))
             {
                 // Resize the image in place and return it for chaining.
                 // 'x' signifies the current image processing context.
@@ -160,14 +176,17 @@ namespace CloudFileServer.Controllers
                 {
                     float aspect = (float)image.Width / image.Height;
                     image.Mutate(x => x.Resize((int)(aspect * thumbnailHeight), thumbnailHeight));
-                    if (image.Width > 160)
-                        image.Mutate(x => x.Resize(200, (int)(200 / aspect)));
+                    //if (image.Width > 160)
+                    //image.Mutate(x => x.Resize(200, (int)(200 / aspect)));
 
                     image.SaveAsJpeg(ms);
-                    return File(ms.ToArray(), "image/jpeg");
+                    return File(ms.ToArray(), "image/webp");
                 }
-            }
-        }
+            }*/
+            return new EmptyResult();
 
+            //}
+
+        }
     }
 }

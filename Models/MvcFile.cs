@@ -45,7 +45,7 @@ namespace CloudFileServer.Models
             MakeSizeString();
             DateString = HelperFunctions.MakeDateString(Date);
             string[] extensions = new string[5]{".jpg",".png",".webp","bmp","tiff"};
-            if(extensions.Contains(Extension))
+            if(extensions.Contains(Extension.ToLower()))
                 UseThumbnail = true;
         }
         public void MakeSizeString()

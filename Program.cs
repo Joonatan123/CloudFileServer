@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.HttpOverrides;
+using CloudFileServer.Functions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string path = builder.Configuration.GetValue<string>("RootPath", "undefined");
@@ -12,6 +14,10 @@ if(!Directory.Exists(path))
 });*/
 //builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
     //.AddCertificate();
+//HelperFunctions.MakeThumbnails(path);
+var t = new Thread(() => HelperFunctions.MakeThumbnails(path));
+t.Start();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
